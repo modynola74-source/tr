@@ -119,16 +119,12 @@ jobs:
 
       - name: Establish Tailscale Connection
         run: |
-          # 1. Clean up any stuck local state first to prevent identity conflicts
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" logout -ErrorAction SilentlyContinue
-          Start-Sleep -Seconds 2
-
-          # 2. Connect with memory state to inherit the registered hostname and stable IP seamlessly
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-toolboxlap --accept-routes --state=mem:
+          # Pure, stable and fast Tailscale connection logic (Generates sequentially numbered runners)
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-toolboxlap-${{ github.run_number }} --accept-routes
           
           $tsIP = $null
           $retries = 0
-          while (-not $tsIP -and $retries -lt 12) {
+          while (-not $tsIP -and $retries -lt 10) {
               $tsIP = & "$env:ProgramFiles\Tailscale\tailscale.exe" ip -4
               Start-Sleep -Seconds 5
               $retries++
