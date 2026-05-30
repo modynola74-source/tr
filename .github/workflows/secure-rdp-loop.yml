@@ -119,8 +119,8 @@ jobs:
 
       - name: Establish Tailscale Connection
         run: |
-          # Uses fixed hostname to allow fully automated background reconnection without any login prompts
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-toolboxlap --accept-routes
+          # Added --force-reauth to instantly replace the old runner and seize the exact same IP and Hostname
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-toolboxlap --accept-routes --force-reauth
           $tsIP = $null
           $retries = 0
           while (-not $tsIP -and $retries -lt 10) {
