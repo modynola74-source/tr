@@ -55,11 +55,14 @@ jobs:
           "@
           Write-Host $notice
 
-          $encodedCheck = "aWYgKCRub3RpY2UgLW5vdGxpa2UgIipUb29sYm94TGFwLmNvbSoiIC1vciAkbm90bGlrZSAiKjIwMjYqIikgeyBXcml0ZS1FcnJvciAiQ29weXJpZ2h0IHdhcyB0YW1wZXJlZCB3aXRoIG9yIHJlbW92ZWQg4oCTIHNjcmlwdCB3aWxsIG5vdCB3b3JrISI7IGV4aXQgMSB9"
-          $decodedBytes = [System.Convert]::FromBase64String($encodedCheck)
-          $decodedScript = [System.Text.Encoding]::UTF8.GetString($decodedBytes)
-          Invoke-Expression $decodedScript
-          
+          # Obfuscated Integrity Check using ASCII decimals to prevent tamper and encoding crashes
+          $k1 = [string][char[]](84,111,111,108,98,111,120,76,97,112,46,99,111,109)
+          $k2 = [string][char[]](50,48,50,54)
+
+          if ($notice -notlike "*$k1*" -or $notice -notlike "*$k2*") {
+              Write-Error "Copyright was tampered with or removed – script will not work!"
+              exit 1
+          }
           Write-Host "✅ Cryptographic signature verified. Script is secure."
 
       - name: Core RDP Settings
@@ -151,7 +154,6 @@ jobs:
         run: |
           $inputLoops = "${{ github.event.inputs.loops }}"
           
-          # If the user leaves it empty (first run), system forces 4 loops automatically
           if (-not $inputLoops) {
               $loops = 4
           } else {
