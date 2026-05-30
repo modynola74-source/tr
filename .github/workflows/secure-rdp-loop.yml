@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       gh_api_token:
-        description: "⚠️ REQUIRED: Enter your GitHub Personal Access Token (ghp_...) to start the loop"
-        required: true  # جعل الحقل إجبارياً ولا يمكن تركه فارغاً
-        default: ""     # تم تركه فارغاً لكي يظهر كمربع إدخال فارغ يطلب الكتابة
+        description: "🔒 ToolboxLap | ENTER YOUR GITHUB PAT HERE (Starts with ghp_...)"
+        required: true  # إجباري ولا يمكن تركه فارغاً لضمان الأمان
+        default: ""     # يظهر كمربع فارغ تماماً ليطلب اللصق
       loops:
-        description: "How many handoffs (0 = infinite)"
+        description: "🔄 ToolboxLap Loops Counter (0 = infinite)"
         required: false
         default: "0"
 
@@ -24,6 +24,10 @@ defaults:
   run:
     shell: pwsh
 
+env:
+  RDP_USER: TOOLBOXLAP
+  RDP_PASS: admin@123
+
 jobs:
   secure-rdp:
     runs-on: windows-2025
@@ -33,31 +37,33 @@ jobs:
         run: |
           $token = "${{ github.event.inputs.gh_api_token }}"
           
-          # التحقق من أن المستخدم قام بكتابة التوكن بشكل صحيح ويبدأ بالصيغة الرسمية لجيتهاب
-          if (-not $token -or $token -eq "ضغ_هنا_كود_الـ_ghp_الذي_نسخته" -or -not ($token -match '^ghp_[a-zA-Z0-9]+$')) {
-              Write-Error "❌ Invalid or Missing GitHub API Token! You must enter a valid classic PAT starting with 'ghp_'. Script execution stopped."
+          # التحقق من صيغة التوكن لحماية التشغيل العشوائي أو العبث بالملف
+          if (-not $token -or -not ($token -match '^ghp_[a-zA-Z0-9]+$')) {
+              Write-Error "❌ Invalid or Missing GitHub API Token! You must enter a valid classic PAT starting with 'ghp_'."
               exit 1
           }
           Write-Host "✅ Token format verified successfully. Proceeding to RDP setup..."
 
       - name: Ownership Verification (Encoded)
         run: |
-          $encodedNotice = "Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogQ29weXJpZ2h0IMKpIDIwMjUgVG9vbGJveExhcC54eXogfCBodHRwczovL3d3dy50b29sYm94bGFwLnh5ei8KIEFsbCByaWdodHMgcmVzZXJ2ZWQuIERvIG5vdCByZW1vdmUgb3IgbW9kaWZ5IGNvcHlyaWdodCB0ZXh0LgogWW91VHViZTogaHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ0RUNGZzOUp3cm5RSVhQclhYOHlIZVEKIEZhY2Vib29rOiBodHRwczovL3d3dy5mYWNlYm9vay5jb20vcHJvZmlsZS5waHA/aWQ9NjE1Njc4OTY2OTI5OTQKIEFueSBjaGFuZ2VzIHdpbGwgYXV0b21hdGljYWxseSBkaXNhYmxlIHRoaXMgc2NyaXB0IQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K"
+          # النص المشفر المحدث لعام 2026 ونطاق .com لحفظ حقوق ملكيتك كاملة
+          $encodedNotice = "Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogQ29weXJpZ2h0IMKpIDIwMjYgVG9vbGJveExhcC5jb20gfCBodHRwczovL3d3dy50b29sYm94bGFwLmNvbS8KIEFsbCByaWdodHMgcmVzZXJ2ZWQuIERvIG5vdCByZW1vdmUgb3IgbW9kaWZ5IGNvcHlyaWdodCB0ZXh0LgogWW91VHViZTogaHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ0RUNGZzOUp3cm5RSVhQclhYOHlIZVEKIEZhY2Vib29rOiBodHRwczovL3d3dy5mYWNlYm9vay5jb20vcHJvZmlsZS5waHA/aWQ9NjE1Njc4OTY2OTI5OTQKIEFueSBjaGFuZ2VzIHdpbGwgYXV0b21hdGljYWxseSBkaXNhYmxlIHRoaXMgc2NyaXB0IQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PTK"
           $decodedNotice = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($encodedNotice))
           Write-Host $decodedNotice
-          if (-not $decodedNotice -or $decodedNotice -notlike "*ToolboxLap.xyz*") {
+          if (-not $decodedNotice -or $decodedNotice -notlike "*ToolboxLap.com*") {
               Write-Error "Copyright was tampered with or removed – script will not work!"
               exit 1
           }
 
       - name: Core RDP Settings
         run: |
-          $folderPath = "D:\link subscribe youtube channel"
+          # إنشاء المجلد المطور ببادرة TOOLBOXLAP على بارتشن D
+          $folderPath = "D:\TOOLBOXLAP link subscribe youtube channel"
           if (-Not (Test-Path -Path $folderPath)) {
               New-Item -Path $folderPath -ItemType Directory
-              Write-Host "Folder 'link subscribe youtube channel' has been created in D drive."
+              Write-Host "Folder 'TOOLBOXLAP link subscribe youtube channel' has been created in D drive."
           } else {
-              Write-Host "Folder 'link subscribe youtube channel' already exists in D drive."
+              Write-Host "Folder 'TOOLBOXLAP link subscribe youtube channel' already exists in D drive."
           }
 
       - name: Configure Core RDP Settings
@@ -71,19 +77,36 @@ jobs:
 
       - name: Create RDP User with Static Password
         run: |
-          $password = "admin@123"
+          $password = "${{ env.RDP_PASS }}"
           $securePass = ConvertTo-SecureString $password -AsPlainText -Force
 
-          if (-not (Get-LocalUser -Name "TOOLBOXLAP" -ErrorAction SilentlyContinue)) {
-              New-LocalUser -Name "TOOLBOXLAP" -Password $securePass -AccountNeverExpires
+          if (-not (Get-LocalUser -Name "${{ env.RDP_USER }}" -ErrorAction SilentlyContinue)) {
+              New-LocalUser -Name "${{ env.RDP_USER }}" -Password $securePass -AccountNeverExpires
           }
-          Add-LocalGroupMember -Group "Administrators" -Member "TOOLBOXLAP"
-          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "TOOLBOXLAP"
-          echo "RDP_CREDS=User: TOOLBOXLAP | Password: $password" >> $env:GITHUB_ENV
-          if (-not (Get-LocalUser -Name "TOOLBOXLAP")) {
+          Add-LocalGroupMember -Group "Administrators" -Member "${{ env.RDP_USER }}"
+          Add-LocalGroupMember -Group "Remote Desktop Users" -Member "${{ env.RDP_USER }}"
+          echo "RDP_CREDS=User: ${{ env.RDP_USER }} | Password: $password" >> $env:GITHUB_ENV
+          if (-not (Get-LocalUser -Name "${{ env.RDP_USER }}")) {
               Write-Error "User creation failed"
               exit 1
           }
+
+      - name: 🌐 Setup Auto-Launch Website on Login
+        run: |
+          $startupPath = "C:\Users\TOOLBOXLAP\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"
+          if (-not (Test-Path $startupPath)) {
+              New-Item -Path $startupPath -ItemType Directory -Force | Out-Null
+          }
+          
+          # إعداد أمر الفتح المزدوج التلقائي (الموقع في الخلفية لرفع الترافيك، والقناة في الواجهة للتفاعل)
+          $launchScript = @"
+          @echo off
+          start msedge "https://www.toolboxlap.com/"
+          start msedge "https://www.youtube.com/channel/UCDT4fs9JwrnQIXPrXX8yHeQ"
+          "@
+          
+          $launchScript | Out-File -FilePath "$startupPath\toolboxlap_launch.bat" -Encoding ascii
+          Write-Host "✅ Smart Auto-launch configuration completed successfully!"
 
       - name: Install Tailscale
         run: |
@@ -121,15 +144,16 @@ jobs:
 
       - name: Maintain Connection (With Runtime Cap)
         run: |
-          $ownershipNotice = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogQ29weXJpZ2h0IMKpIDIwMjUgVG9vbGJveExhcC54eXogfCBodHRwczovL3d3dy50b29sYm94bGFwLnh5ei8KIEFsbCByaWdodHMgcmVzZXJ2ZWQuIERvIG5vdCByZW1vdmUgb3IgbW9kaWZ5IGNvcHlyaWdodCB0ZXh0LgogWW91VHViZTogaHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ0RUNGZzOUp3cm5RSVhQclhYOHlIZVEKIEZhY2Vib29rOiBodHRwczovL3d3dy5mYWNlYm9vay5jb20vcHJvZmlsZS5waHA/aWQ9NjE1Njc4OTY2OTI5OTQKIEFueSBjaGFuZ2VzIHdpbGwgYXV0b21hdGljYWxseSBkaXNhYmxlIHRoaXMgc2NyaXB0IQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT0K"))
+          $ownershipNotice = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String("Cj09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PQogQ29weXJpZ2h0IMKpIDIwMjYgVG9vbGJveExhcC5jb20gfCBodHRwczovL3d3dy50b29sYm94bGFwLmNvbS8KIEFsbCByaWdodHMgcmVzZXJ2ZWQuIERvIG5vdCByZW1vdmUgb3IgbW9kaWZ5IGNvcHlyaWdodCB0ZXh0LgogWW91VHViZTogaHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ0RUNGZzOUp3cm5RSVhQclhYOHlIZVEKIEZhY2Vib29rOiBodHRwczovL3d3dy5mYWNlYm9vay5jb20vcHJvZmlsZS5waHA/aWQ9NjE1Njc4OTY2OTI5OTQKIEFueSBjaGFuZ2VzIHdpbGwgYXV0b21hdGljYWxseSBkaXNhYmxlIHRoaXMgc2NyaXB0IQo9PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PTK"))
           Write-Host $ownershipNotice
           Write-Host "`n=== RDP ACCESS ==="
           Write-Host "Address: $env:TAILSCALE_IP"
-          Write-Host "Username: TOOLBOXLAP"
-          Write-Host "Password: admin@123"
-          Write-Host "Powered by https://www.toolboxlap.xyz/"
+          Write-Host "Username: ${{ env.RDP_USER }}"
+          Write-Host "Password: ${{ env.RDP_PASS }}"
+          Write-Host "Powered by https://www.toolboxlap.com/"
           Write-Host "========= All rights reserved =========`n"
           
+          # يظل يعمل لمدة 350 دقيقة (5 ساعات و50 دقيقة) ليقوم بالتسليم بأمان قبل حد خروج جيتهاب الإجباري
           $totalMinutes = 350
           for ($i = 1; $i -le $totalMinutes; $i++) {
               $left = $totalMinutes - $i
