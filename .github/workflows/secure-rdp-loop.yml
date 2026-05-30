@@ -119,8 +119,8 @@ jobs:
 
       - name: Establish Tailscale Connection
         run: |
-          # Added --force-reauth to instantly replace the old runner and seize the exact same IP and Hostname
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-toolboxlap --accept-routes --force-reauth
+          # Upgraded with memory state and re-auth to force exact IP override across loops dynamically
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-toolboxlap --accept-routes --force-reauth --state=mem:
           $tsIP = $null
           $retries = 0
           while (-not $tsIP -and $retries -lt 10) {
