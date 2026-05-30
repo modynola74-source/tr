@@ -44,7 +44,17 @@ jobs:
 
       - name: 📢 Display Clickable Official Links & Copyrights
         run: |
-          # Creating an official clean Job Summary with clickable blue links for your audience
+          $logNotice = @"
+          =================================================================
+           Copyright © 2026 ToolboxLap.com | https://www.toolboxlap.com/
+           All rights reserved. Do not remove or modify copyright text.
+           YouTube: https://www.youtube.com/channel/UCDT4fs9JwrnQIXPrXX8yHeQ
+           Facebook: https://www.facebook.com/profile.php?id=615667896692994
+           Any changes will automatically disable this script!
+          =================================================================
+          "@
+          Write-Host $logNotice
+
           $summaryContent = @"
           # 🚀 TOOLBOXLAP OFFICIAL RDP AUTOMATION
 
@@ -62,7 +72,7 @@ jobs:
           "@
           
           $summaryContent | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
-          Write-Host "✅ Official links and copyrights injected into Job Summary successfully."
+          Write-Host "✅ Official links injected into both Logs and Summary page successfully."
 
       - name: Core RDP Settings
         run: |
@@ -109,7 +119,8 @@ jobs:
 
       - name: Establish Tailscale Connection
         run: |
-          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-$env:GITHUB_RUN_ID
+          # Uses fixed hostname to allow fully automated background reconnection without any login prompts
+          & "$env:ProgramFiles\Tailscale\tailscale.exe" up --authkey=${{ secrets.TAILSCALE_AUTH_KEY }} --hostname=gh-runner-toolboxlap --accept-routes
           $tsIP = $null
           $retries = 0
           while (-not $tsIP -and $retries -lt 10) {
