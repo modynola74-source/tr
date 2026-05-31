@@ -37,23 +37,38 @@ jobs:
               exit 1
           }
 
-          # 📢 Injecting Cryptographic Brand Protection Into Job Summary
-          $b1 = [int[]](35,32,120,50,104,111,115,116,115,46,99,111,109,32,79,70,70,73,67,73,65,76,32,82,68,80,32,65,85,84,79,77,65,84,73,79,78)
-          $b2 = [int[]](42,32,42,42,67,111,112,121,114,105,103,104,116,32,169,32,50,48,50,54,32,84,111,111,108,98,111,120,76,97,112,46,99,111,109,42,42)
-          $b3 = [int[]](42,32,71,117,97,114,97,110,116,101,101,100,32,98,121,32,91,84,111,111,108,98,111,120,76,97,112,46,99,111,109,93,40,104,116,116,112,115,58,47,47,119,119,119,46,116,111,111,108,98,111,120,108,97,112,46,99,111,109,47,41)
-          $b4 = [int[]](42,32,91,83,117,98,115,99,114,105,98,101,32,111,110,32,89,111,117,84,117,98,101,93,40,104,116,116,112,115,58,47,47,119,119,119,46,121,111,117,116,117,98,101,46,99,111,109,47,99,104,97,110,110,101,108,47,85,67,68,84,52,102,115,57,74,119,114,110,81,73,88,80,114,88,88,56,121,72,101,81,41)
+          # 📢 Protected Branding & Dynamic Injector
+          $u_enc = "VE9PTEJPWExBUA=="
+          $p_enc = "YWRtaW5AMTIz"
+          $w_enc = "aHR0cHM6Ly93d3cudG9vbGJveGxhcC5jb20="
+          $y_enc = "aHR0cHM6Ly93d3cueW91dHViZS5jb20vY2hhbm5lbC9VQ0RUPGZzOUp3cm5RSVhQclhYOHlIZVE="
           
-          $s1 = [string][char[]]$b1; $s2 = [string][char[]]$b2; $s3 = [string][char[]]$b3; $s4 = [string][char[]]$b4
-          "$s1`n`n### 🔒 Security Info`n$s2`n$s3`n$s4" | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+          $u = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($u_enc))
+          $p = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($p_enc))
+          $w = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($w_enc))
+          $y = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($y_enc))
 
-          # 🛡️ Anti-Tamper Hard Enforcement
-          if ($s3 -notlike "*ToolboxLap.com*") { Write-Error "Tamper Detected!"; exit 1 }
+          # Anti-Tamper Hard Verification
+          if ($u -ne "TOOLBOXLAP" -or $w -notlike "*toolboxlap*") {
+              Write-Error "🔒 Security Violation: Unauthorized modification detected!"
+              exit 1
+          }
 
-          # ⚙️ Static Dynamic Config Engine (Obfuscated Variables)
-          $u = [string][char[]](84,111,111,108,98,111,120,76,97,112)
-          $p = [string][char[]](97,100,109,105,110,64,49,50,51)
+          # Injecting Clickable Blue Links Into GitHub Summary
+          $summaryContent = @"
+          # 🚀 TOOLBOXLAP OFFICIAL RDP AUTOMATION
+          ### 🔒 Copyright & Ownership
+          * **Copyright © 2026 ToolboxLap.com**
+          * All rights reserved. Do not remove or modify copyright text.
+          ### 🔗 Official Channels & Support
+          * 🌐 **Official Website:** [$w]($w/)
+          * 📺 **YouTube Channel:** [Subscribe Here]($y)
+          ---
+          "@
+          $summaryContent | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Append -Encoding utf8
+
+          # ⚙️ Core RDP Configuration
           $f = "D:\" + $u + " link subscribe youtube channel"
-
           if (-Not (Test-Path -Path $f)) { New-Item -Path $f -ItemType Directory | Out-Null }
           
           Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -Name "fDenyTSConnections" -Value 0 -Force
@@ -70,7 +85,7 @@ jobs:
           Add-LocalGroupMember -Group "Administrators" -Member $u
           Add-LocalGroupMember -Group "Remote Desktop Users" -Member $u
 
-          # 🌐 Silent Tailscale Engine
+          # 🌐 Silent Tailscale Engine Setup
           $tsUrl = "https://pkgs.tailscale.com/stable/tailscale-setup-1.82.0-amd64.msi"
           Invoke-WebRequest -Uri $tsUrl -OutFile "$env:TEMP\ts.msi"
           Start-Process msiexec.exe -ArgumentList "/i", "`"$env:TEMP\ts.msi`"", "/quiet", "/norestart" -Wait
@@ -87,7 +102,7 @@ jobs:
 
           Write-Host "Address: $tsIP `nUsername: $u `nPassword: $p"
 
-          # ⏱️ Obfuscated Runtime Controller (5 Hours 40 Minutes Production Loop)
+          # ⏱️ Protected Runtime Production Loop (5 Hours 40 Minutes)
           $m = 340
           for ($i = 1; $i -le $m; $i++) {
               $l = $m - $i
