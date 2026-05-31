@@ -100,7 +100,15 @@ jobs:
           }
           if (-not $tsIP) { Write-Error "Network Fail"; exit 1 }
 
-          Write-Host "Address: $tsIP `nUsername: $u `nPassword: $p"
+          # 📢 Printing Credentials and Brand Links directly inside the Logs Console
+          Write-Host "Address: $tsIP"
+          Write-Host "Username: $u"
+          Write-Host "Password: $p"
+          Write-Host "-----------------------------------------------------------------"
+          Write-Host "⚡ Powered by Toolbox Lab"
+          Write-Host "🌐 Official Website: $w"
+          Write-Host "📺 YouTube Channel: $y"
+          Write-Host "================================================================="
 
           # ⏱️ Protected Runtime Production Loop (5 Hours 40 Minutes)
           $m = 340
